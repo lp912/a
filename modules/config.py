@@ -442,6 +442,12 @@ embeddings_downloads = get_config_item_or_set_default(
     validator=lambda x: isinstance(x, dict) and all(isinstance(k, str) and isinstance(v, str) for k, v in x.items()),
     expected_type=dict
 )
+vae_downloads = get_config_item_or_set_default(
+    key='vae_downloads',
+    default_value={},
+    validator=lambda x: isinstance(x, dict) and all(isinstance(k, str) and isinstance(v, str) for k, v in x.items()),
+    expected_type=dict
+)
 available_aspect_ratios = get_config_item_or_set_default(
     key='available_aspect_ratios',
     default_value=modules.flags.sdxl_aspect_ratios,
@@ -458,6 +464,12 @@ default_inpaint_engine_version = get_config_item_or_set_default(
     key='default_inpaint_engine_version',
     default_value='v2.6',
     validator=lambda x: x in modules.flags.inpaint_engine_versions,
+    expected_type=str
+)
+default_inpaint_method = get_config_item_or_set_default(
+    key='default_inpaint_method',
+    default_value=modules.flags.inpaint_option_default,
+    validator=lambda x: x in modules.flags.inpaint_options,
     expected_type=str
 )
 default_cfg_tsnr = get_config_item_or_set_default(
@@ -521,7 +533,7 @@ example_inpaint_prompts = [[x] for x in example_inpaint_prompts]
 
 config_dict["default_loras"] = default_loras = default_loras[:default_max_lora_number] + [[True, 'None', 1.0] for _ in range(default_max_lora_number - len(default_loras))]
 
-# mapping config to meta parameter 
+# mapping config to meta parameter
 possible_preset_keys = {
     "default_model": "base_model",
     "default_refiner": "refiner_model",
@@ -537,6 +549,7 @@ possible_preset_keys = {
     "default_sampler": "sampler",
     "default_scheduler": "scheduler",
     "default_overwrite_step": "steps",
+    "default_overwrite_switch": "overwrite_switch",
     "default_performance": "performance",
     "default_image_number": "image_number",
     "default_prompt": "prompt",
@@ -547,7 +560,10 @@ possible_preset_keys = {
     "checkpoint_downloads": "checkpoint_downloads",
     "embeddings_downloads": "embeddings_downloads",
     "lora_downloads": "lora_downloads",
-    "default_vae": "vae"
+    "vae_downloads": "vae_downloads",
+    "default_vae": "vae",
+    # "default_inpaint_method": "inpaint_method", # disabled so inpaint mode doesn't refresh after every preset change
+    "default_inpaint_engine_version": "inpaint_engine_version",
 }
 
 REWRITE_PRESET = False
